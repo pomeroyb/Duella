@@ -16,7 +16,7 @@
       your Teensy from communicating with CWS.
     */
 
-  const int 
+
   
   
   #define IO_LED                       11

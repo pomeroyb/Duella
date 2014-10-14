@@ -1,6 +1,6 @@
 #include "GcodeParser.h"
 
-
+#include <stdlib.h>
   GcodeParser::GcodeParser()
   {
     

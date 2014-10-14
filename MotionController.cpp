@@ -20,8 +20,10 @@
   //This attaches our servo to the correct pin
   void MotionController::attachServo( void )
   {
-     apertureServo_.attach(IO_APERTURE_SERVO); 
-     apertureServo_.write(ApertureClose); //Close aperture
+    #ifdef IO_APERTURE_SERVO
+       apertureServo_.attach(IO_APERTURE_SERVO); 
+       apertureServo_.write(ApertureClose); //Close aperture
+    #endif
   }
   
   void MotionController::setFeedrate( float feeds[] )

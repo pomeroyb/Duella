@@ -11,7 +11,7 @@
 //This determines the speed at which the printer communicates with the computer.
 //Standard speeds: 300, 1200, 2400, 4800, 9600, 14400, 19200, 28800, 38400, 57600, 115200, 250000
 //Creation Workshop operates at 115200.
-const int BAUDRATE = 115200;
+#define BAUDRATE  115200
 
 
 //==================================HARDWARE CONFIGURATIONS==================================

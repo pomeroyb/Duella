@@ -138,7 +138,9 @@ void setup()
 //*****************************//
 //Setting up MotionController
 //*****************************//  
-  motionControl.attachServo();  
+  #ifdef IO_APERTURE_SERVO
+    motionControl.attachServo();  
+  #endif
   motionControl.giveGcodeParser( gcodeParser );
   motionControl.setFeedrate(defaultFeedrate);
   motionControl.setAxisSteps(stepsPerMM);
