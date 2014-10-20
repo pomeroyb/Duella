@@ -102,11 +102,13 @@
       String* parsedLine = gcodeParser_.parseLine(sBuffer);
       int numberOfCommands = parsedLine[0].toInt(); //As set in our parseLine method
       int commandCount = 0;
+      //String* parsedLineWithoutCount = parsedLine.substring(1);
       String** commandArray = gcodeParser_.parseCommands(parsedLine);
-      for (int i = 0; i < numberOfCommands; i++)
+      for (int i = 1; i < numberOfCommands; i++) //We start at 1 since the 0 pos is the number of commands.
       {
         String* fullCommand = commandArray[i];
         String commandLetterString = fullCommand[0];
+        commandCount++; //We're going to increase our counter to make sure we don't read the same command twice.
         char commandLetter = commandLetterString.charAt(0);
         String commandValueString = fullCommand[1];
         float commandValue = float(gcodeParser_.stringToFloat(commandValueString));
@@ -120,7 +122,38 @@
               switch(commandValueInt)
               {
                 case 1: //G1, simple move
-                  //TODO
+                  //We know that the next three commands could possibly be X, Y, or Z.
+                  if (commandCount < numberOfCommands)
+                  {// So we don't try to grab a null
+                    String* nextCommand = commandArray[i+1];
+                    char nextCommandLetter = nextCommand[0].charAt(0);
+                    float nextCommandValue = float(gcodeParser_.stringToFloat(nextCommand[1]));
+                    
+                    if (nextCommandLetter == 'X' || nextCommandLetter == 'Y' || nextCommandLetter == 'Z')
+                    {
+                      switch(nextCommandLetter
+                      {
+                        case 'X':
+                          moveX( nextCommandValue );
+                          break;
+                        case 'Y':
+                          moveX( nextCommandValue );
+                          break;
+                        case 'Z':
+                          moveZ( nextCommandValue );
+                          break;
+                      }
+                      commandCount++;
+                      i++; //We want to increase our counter to make sure that we don't check this twice.
+                    }
+                    
+                    if(commandCount < numberOfCommands)
+                    {
+                      
+                    }
+                    
+                  }
+                  
                   break;
                 case 4: //G4, dwell. 
                   //TODO
