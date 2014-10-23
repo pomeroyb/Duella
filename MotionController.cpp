@@ -131,7 +131,7 @@
                     
                     if (nextCommandLetter == 'X' || nextCommandLetter == 'Y' || nextCommandLetter == 'Z')
                     {
-                      switch(nextCommandLetter
+                      switch(nextCommandLetter)
                       {
                         case 'X':
                           moveX( nextCommandValue );
@@ -145,12 +145,60 @@
                       }
                       commandCount++;
                       i++; //We want to increase our counter to make sure that we don't check this twice.
+                      
+                      if(commandCount < (numberOfCommands - 1))
+                      { //Again, don't want to grab a null!
+                        String* nextNextCommand = commandArray[i+2];
+                        char nextNextCommandLetter = nextNextCommand[0].charAt(0);
+                        float nextNextCommandValue = float(gcodeParser_.stringToFloat(nextNextCommand[1]));
+                    
+                        if (nextNextCommandLetter == 'X' || nextNextCommandLetter == 'Y' || nextNextCommandLetter == 'Z')
+                        {
+                          switch(nextNextCommandLetter)
+                          {
+                            case 'X':
+                              moveX( nextNextCommandValue );
+                              break;
+                            case 'Y':
+                              moveX( nextNextCommandValue );
+                              break;
+                            case 'Z':
+                              moveZ( nextNextCommandValue );
+                              break;
+                          }
+                          commandCount++;
+                          i++; //We want to increase our counter to make sure that we don't check this twice.
+                          
+                          if(commandCount < (numberOfCommands - 2))
+                          { //Again, don't want to grab a null!
+                            String* nextNextNextCommand = commandArray[i+3];  /// This is getting ridiculous...
+                            char nextNextNextCommandLetter = nextNextNextCommand[0].charAt(0);
+                            float nextNextNextCommandValue = float(gcodeParser_.stringToFloat(nextNextNextCommand[1]));
+                        
+                            if (nextNextNextCommandLetter == 'X' || nextNextNextCommandLetter == 'Y' || nextNextNextCommandLetter == 'Z')
+                            {
+                              switch(nextNextNextCommandLetter)
+                              {
+                                case 'X':
+                                  moveX( nextNextNextCommandValue );
+                                  break;
+                                case 'Y':
+                                  moveX( nextNextNextCommandValue );
+                                  break;
+                                case 'Z':
+                                  moveZ( nextNextNextCommandValue );
+                                  break;
+                              }
+                              commandCount++;
+                              i++; //We want to increase our counter to make sure that we don't check this twice.
+                              //We know that it will be, at most, "G1 X_ Y_ Z_", so we can stop at 3 iterations. Thank god that this silliness is done.
+                            }
+                          }
+                        }
+                      }
                     }
                     
-                    if(commandCount < numberOfCommands)
-                    {
-                      
-                    }
+
                     
                   }
                   
@@ -199,16 +247,20 @@
         
         for (int i = 0; i < stepsToTake; i++)
         {
-          digitalWrite( X_STEPPER_STEP, 1);
-          delayMicroseconds(500);
-          digitalWrite( X_STEPPER_STEP, 0);
-          if (stepDelay_[0] <= 500)
+          if(!checkEndstopTriggered(0) )
           {
+            digitalWrite( X_STEPPER_STEP, 1);
             delayMicroseconds(500);
-          }else{
-             delayMicroseconds( stepDelay_[0] - 500 );
+            digitalWrite( X_STEPPER_STEP, 0);
+            if (stepDelay_[0] <= 500)
+            {
+              delayMicroseconds(500);
+            }else{
+               delayMicroseconds( stepDelay_[0] - 500 );
+            }
           }
         }
+       
       #endif
     }
 
@@ -226,15 +278,19 @@
         
         for (int i = 0; i < stepsToTake; i++)
         {
-          digitalWrite( Y_STEPPER_STEP, 1);
-          delayMicroseconds(500);
-          digitalWrite( Y_STEPPER_STEP, 0);
-          if (stepDelay_[1] <= 500)
+          if(!checkEndstopTriggered(1) )
           {
+            digitalWrite( Y_STEPPER_STEP, 1);
             delayMicroseconds(500);
-          }else{
-             delayMicroseconds( stepDelay_[1] - 500 );
+            digitalWrite( Y_STEPPER_STEP, 0);
+            if (stepDelay_[1] <= 500)
+            {
+              delayMicroseconds(500);
+            }else{
+               delayMicroseconds( stepDelay_[1] - 500 );
+            }
           }
+          
         }
       #endif
     }
@@ -251,15 +307,59 @@
       
       for (int i = 0; i < stepsToTake; i++)
       {
-        digitalWrite(Z_STEPPER_STEP, 1);
-        delayMicroseconds(500);
-        digitalWrite(Z_STEPPER_STEP, 0);
-        if (stepDelay_[2] <= 500)
+        if(!checkEndstopTriggered(2) )
         {
+          digitalWrite(Z_STEPPER_STEP, 1);
           delayMicroseconds(500);
-        }else{
-           delayMicroseconds( stepDelay_[2] - 500 );
+          digitalWrite(Z_STEPPER_STEP, 0);
+          if (stepDelay_[2] <= 500)
+          {
+            delayMicroseconds(500);
+          }else{
+             delayMicroseconds( stepDelay_[2] - 500 );
+          }
         }
       }
+    }
+    
+    boolean MotionController::checkEndstopTriggered( int axis )
+    {
+      #ifdef Z_PRINT_LEVEL_ENDSTOP
+        if (axis == 2)
+        {
+          if( Z_MIN_ENDSTOP_INVERTING )
+          {
+            return !digitalRead(Z_PRINT_ENDSTOP_PIN);
+          }else {
+            return digitalRead(Z_PRINT_ENDSTOP_PIN);
+          }
+        }
+      #endif
+      
+      #ifdef Y_AXIS_ENDSTOP
+        if (axis == 1)
+        {
+          if( Y_MIN_ENDSTOP_INVERTING )
+          {
+            return !digitalRead(Y_AXIS_ENDSTOP_PIN);
+          }else {
+            return digitalRead(Y_AXIS_ENDSTOP_PIN);
+          }
+        }
+      #endif
+      
+      #ifdef WIPER_AXIS_ENDSTOP
+        if (axis == 0)
+        {
+          if( Z_MIN_ENDSTOP_INVERTING )
+          {
+            return !digitalRead(WIPER_AXIS_ENDSTOP_PIN);
+          }else {
+            return digitalRead(WIPER_AXIS_ENDSTOP_PIN);
+          }
+        }
+      #endif
+      
+      return false;
     }
 

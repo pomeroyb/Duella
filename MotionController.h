@@ -26,6 +26,7 @@
         void moveZ( float amountToMove );
       private:
         void calculateStepDelay( void );
+        boolean checkEndstopTriggered( int axis ); //[0, 1, 2] correlates to [X, Y, Z]
         Servo apertureServo_;
         GcodeParser gcodeParser_;
         String sBuffer;
@@ -37,6 +38,7 @@
         float bloatVariable3[];  //See https://github.com/arduino/Arduino/issues/1071 for more info.
         float bloatVariable4[];
         float bloatVariable5[];
+        
         
   };
         

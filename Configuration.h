@@ -31,6 +31,8 @@
   
   //#define SERVO_APERTURE          //A servo powered aperture for covering the lens during layer changes
   
+  //#define Y_AXIS_ENDSTOP   //An endstop for the Y axis.
+  
 #endif
 
 
@@ -59,9 +61,9 @@
 //
 // An endstop that is wired NC -> GND will need these set to false.
 // An endstop that is wired NO -> GND will need these set to true.
-//const bool X_MIN_ENDSTOP_INVERTING = false; 
-//const bool Y_MIN_ENDSTOP_INVERTING = false; 
-//const bool Z_MIN_ENDSTOP_INVERTING = false; 
+  const bool X_MIN_ENDSTOP_INVERTING = false; 
+  const bool Y_MIN_ENDSTOP_INVERTING = false; 
+  const bool Z_MIN_ENDSTOP_INVERTING = false; 
 
 
 //==================================SERVO CONFIGURATIONS==================================

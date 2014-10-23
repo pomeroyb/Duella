@@ -107,6 +107,21 @@ void setup()
     pinMode(Y_STEPPER_RESET, OUTPUT);
   #endif
   
+  #ifdef Z_PRINT_LEVEL_ENDSTOP
+    pinMode(Z_PRINT_ENDSTOP_PIN, INPUT_PULLUP);
+    delayMicroseconds(10);
+  #endif
+  
+  #ifdef Y_AXIS_ENDSTOP
+    pinMode(Y_AXIS_ENDSTOP_PIN, INPUT_PULLUP);
+    delayMicroseconds(10);
+  #endif
+  
+  #ifdef WIPER_AXIS_ENDSTOP
+    pinMode(WIPER_AXIS_ENDSTOP_PIN, INPUT_PULLUP);
+    delayMicroseconds(10);
+  #endif
+  
 
 //*****************************//
 //Setting each pin to its respective I/O state

@@ -35,7 +35,11 @@
   #endif
   
   #ifdef WIPER_AXIS_ENDSTOP 
-    #define WIPER_ENDSTOP_PIN          8
+    #define WIPER_AXIS_ENDSTOP_PIN          8
+  #endif
+  
+  #ifdef Y_AXIS_ENDSTOP
+    #define Y_AXIS_ENDSTOP_PIN         11   //We're running out of pins! This overlaps on the IO_LED
   #endif
   
   #ifdef WIPER_AXIS_STEPPER  //This is the X-Axis by definition.

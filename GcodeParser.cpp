@@ -58,6 +58,7 @@
       String tempCommand[2];
       String gcode = commands[i];
       String letter = gcode[0];
+      letter = letter.toUpperCase(); //make sure all of our commands are upper case.
       String numbers = gcode.substring(1);
       tempCommand[0] = letter; //The letter command
       tempCommand[1] = numbers; //The numeric value
